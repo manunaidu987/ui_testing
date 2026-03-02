@@ -1,0 +1,51 @@
+name: Cucumber UI Tests
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master", "develop" ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        # Set caching to speed up workflows
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Run Cucumber Tests
+      # Using npm test which maps to npx cucumber-js based on package.json
+      run: npm test
+
+    - name: Generate HTML Report
+      # Using npm run report which maps to node generate-report.js
+      run: npm run report
+      if: always() # Ensure report is generated even if tests fail
+
+    - name: Upload Test Report Artifact
+      uses: actions/upload-artifact@v4
+      if: always() # Ensure the artifact is uploaded even if tests fail
+      with:
+        name: cucumber-test-report
+        path: |
+          reports/
+          cucumber*.json
+          cucumber*.html
+        retention-days: 14
