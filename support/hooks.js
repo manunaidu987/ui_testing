@@ -8,7 +8,7 @@ setDefaultTimeout(10 * 1000);
 Before(async function () {
     if (!browser) {
         browser = await chromium.launch({
-            headless: false,
+            headless: process.env.CI ? true : true, // Enforce headless safely for now to unblock Github Actions
             slowMo: 50,
             args: [
                 '--start-maximized',
