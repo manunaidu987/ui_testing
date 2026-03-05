@@ -15,13 +15,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      # 👆 No ref needed - just checkout ui_testing/main (test code)
 
     - name: Checkout Target Application
       uses: actions/checkout@v4
       with:
         repository: SuperAlignHQ/log_optimization_dashboard
-        ref: 'develop'                              # 👈 always checkout develop branch
+        ref: 'develop'                              
         token: ${{ secrets.UI_TEST_TOKEN || github.token }}
         path: log_optimization_dashboard
 
