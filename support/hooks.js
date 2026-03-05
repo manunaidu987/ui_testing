@@ -10,6 +10,7 @@ Before(async function () {
         browser = await chromium.launch({
             headless: true,
             args: [
+                '--headless',
                 '--no-sandbox',
                 '--disable-setuid-sandbox'
             ]

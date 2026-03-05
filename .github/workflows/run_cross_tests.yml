@@ -24,7 +24,7 @@ jobs:
         run: npx playwright install --with-deps
         
       - name: Run E2E tests headless securely
-        run: npx cucumber-js
+        run: xvfb-run --auto-servernum -- npx cucumber-js
         
       - name: Send status back to dashboard
         if: always()
