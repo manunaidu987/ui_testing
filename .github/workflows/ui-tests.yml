@@ -30,15 +30,15 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies
-      run: npm ci
-
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
         # Set caching to speed up workflows
         cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
 
     - name: Start Backend and Frontend
       run: |
