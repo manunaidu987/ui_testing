@@ -16,14 +16,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        repository: manunaidu987/ui_testing
 
     - name: Checkout Target Application
       uses: actions/checkout@v4
       with:
         repository: SuperAlignHQ/log_optimization_dashboard
-        token: ${{ secrets.UI_TEST_TOKEN }}
+        token: ${{ secrets.UI_TEST_TOKEN || github.token }}
         path: log_optimization_dashboard
 
     - name: Setup Node.js
