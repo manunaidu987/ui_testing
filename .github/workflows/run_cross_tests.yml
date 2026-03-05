@@ -10,13 +10,29 @@ jobs:
       - name: Inject Remote Repository Branch
         uses: actions/checkout@v4
         with:
+          repository: manunaidu987/ui_testing
           ref: ${{ github.event.client_payload.ref || 'main' }}
           
+      - name: Checkout Target Application
+        uses: actions/checkout@v4
+        with:
+          repository: SuperAlignHQ/log_optimization_dashboard
+          token: ${{ secrets.UI_TEST_TOKEN }}
+          path: log_optimization_dashboard
+          ref: ${{ github.event.client_payload.sha || 'main' }}
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           
+      - name: Install Target App dependencies & Start
+        run: |
+          cd log_optimization_dashboard/frontend
+          npm ci
+          npm start &
+          npx wait-on http://localhost:3000
+
       - name: Install dependencies
         run: npm ci
         
