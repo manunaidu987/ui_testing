@@ -26,11 +26,24 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - name: Install Target App dependencies & Start
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Target App Backend & Start
+        run: |
+          cd log_optimization_dashboard
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+          python backend/fresh_start.py
+          uvicorn backend.app.main:app --host 0.0.0.0 --port 8001 &
+          npx wait-on tcp:8001
+      - name: Install Target App Frontend & Start
         run: |
           cd log_optimization_dashboard/frontend
-          npm ci
-          npm start &
+          npm install
+          npm run dev &
           npx wait-on http://localhost:3000/
       - name: Install dependencies
         run: npm ci
