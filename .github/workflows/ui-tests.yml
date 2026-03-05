@@ -15,13 +15,13 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.client_payload.ref || 'develop' }}  # 👈 always use develop branch when triggered by dispatch
+      # 👆 No ref needed - just checkout ui_testing/main (test code)
 
     - name: Checkout Target Application
       uses: actions/checkout@v4
       with:
         repository: SuperAlignHQ/log_optimization_dashboard
+        ref: 'develop'                              # 👈 always checkout develop branch
         token: ${{ secrets.UI_TEST_TOKEN || github.token }}
         path: log_optimization_dashboard
 
