@@ -6,67 +6,9 @@ on:
     types: [run-ui-tests]
 
 jobs:
-
-  backend-test:
-    name: Backend Tests
-    timeout-minutes: 30
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Checkout Target Application
-      uses: actions/checkout@v4
-      with:
-        repository: SuperAlignHQ/log_optimization_dashboard
-        ref: ${{ github.event.client_payload.sha }}
-        token: ${{ secrets.UI_TEST_TOKEN }}
-        path: log_optimization_dashboard
-
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-
-    - name: Install Backend & Start
-      run: |
-        cd log_optimization_dashboard
-        python -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
-        python backend/fresh_start.py
-        uvicorn backend.app.main:app --host 0.0.0.0 --port 8001 &
-        npx wait-on tcp:8001
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-
-    - name: Run Backend Cucumber Tests
-      run: xvfb-run --auto-servernum -- npm test --tags @backend
-
-    - name: Generate HTML Report
-      run: npm run report
-      if: always()
-
-    - name: Upload Backend Test Report
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: backend-test-report
-        path: |
-          reports/
-          cucumber*.json
-          cucumber*.html
-        retention-days: 14
-
-  frontend-test:
-    name: Frontend Tests
+  test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    needs: [backend-test]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -113,18 +55,18 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    - name: Run Frontend Cucumber Tests
-      run: xvfb-run --auto-servernum -- npm test --tags @frontend
+    - name: Run Cucumber Tests
+      run: xvfb-run --auto-servernum -- npm test
 
     - name: Generate HTML Report
       run: npm run report
       if: always()
 
-    - name: Upload Frontend Test Report
+    - name: Upload Test Report
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: frontend-test-report
+        name: cucumber-test-report
         path: |
           reports/
           cucumber*.json
