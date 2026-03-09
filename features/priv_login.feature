@@ -13,7 +13,7 @@ Feature: Privileged(user)Login - Sign in to your account
   #  INVALID CREDENTIALS
   @regression @login
   Scenario: Login fails with wrong password
-    When the user enters email "priv1@example.com" and password "1234"
+    When the user enters email "priv1@example.com" and password "priv123"
     And the user clicks the "Sign In" button
     Then the user should see an error message 'Invalid email or password'
 
