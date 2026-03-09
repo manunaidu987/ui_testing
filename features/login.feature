@@ -6,7 +6,7 @@ Feature: Admin(user)Login - Sign in to your account
   # HAPPY PATH
   @smoke @login
   Scenario: Successful login with valid credentials
-    When the user enters email "admin@example.com" and password "admin123"
+    When the user enters email "admin@example.com" and password "admin1234"
     And the user clicks the "Sign In" button
     Then the user should be redirected to the overview
 
