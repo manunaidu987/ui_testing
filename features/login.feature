@@ -6,14 +6,14 @@ Feature: Admin(user)Login - Sign in to your account
   # HAPPY PATH
   @smoke @login
   Scenario: Successful login with valid credentials
-    When the user enters email "admin@example.com" and password "admin1234"
+    When the user enters email "admin@example.com" and password "admin123"
     And the user clicks the "Sign In" button
     Then the user should be redirected to the overview
 
   #  INVALID CREDENTIALS
   @regression @login
   Scenario: Login fails with wrong password
-    When the user enters email "admin1@example.com" and password "admin1234"
+    When the user enters email "admin1@example.com" and password "admin123"
     And the user clicks the "Sign In" button
     Then the user should see an error message 'Invalid email or password'
 
